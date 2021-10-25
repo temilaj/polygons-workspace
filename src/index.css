@@ -48,6 +48,10 @@ header {
   font-weight: 600;
 }
 
+.button.danger {
+  background-color: red;
+}
+
 .toolbar {
   display: flex;
   justify-content: space-between;

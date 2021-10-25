@@ -16,7 +16,7 @@ function SolutionsList(props: Props) {
 
   return (
     <div>
-      <h3>List of proposed solutions</h3>
+      <h3>Proposed solutions</h3>
       {proposedSolutions.map((proposedSolution: ProposedSolution, index: number) => (
         <div key={proposedSolution.id}>
           <button className="button" onClick={() => handleSelectPolygon(proposedSolution)}>

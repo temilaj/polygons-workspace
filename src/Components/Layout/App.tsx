@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 
 import Navbar from './Navbar';
 import Panel from './Panel';
@@ -12,7 +12,6 @@ import './../stylesheets/App.css';
 
 function App() {
   const { setProposedSolutions } = useContext(AppContext);
-
   useEffect(() => {
     setProposedSolutions(proposedSolutions);
   }, []);

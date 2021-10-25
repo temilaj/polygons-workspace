@@ -1,26 +1,26 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { v4 as uuidV4 } from 'uuid';
-import { ProposedSolution } from '../../@types';
+
+import { ProposedSolution, WorkSurfaceOperation, Polygon } from '../../@types';
 
 import AppContext from '../../data/context/AppContext';
 import { getPolygonName } from '../../utils';
 import Button from '../Primary/Button';
+import OperationResults from '../Secondary/OperationResults';
 
-type Props = {};
-
-function WorkSurface(props: Props) {
-  const { proposedSolutions, selectedSolution, selectPolygon } = useContext(AppContext);
+function WorkSurface() {
+  const {
+    proposedSolutions,
+    selectedSolution,
+    selectPolygon,
+    operationResults,
+    updateOperationResult,
+    clearSelectedPolygons,
+  } = useContext(AppContext);
   const [error, setError] = useState<string>('');
-  const [currentSolution, setCurrentSolution] = useState<ProposedSolution | null>(null);
+  const [operation, setOperation] = useState<WorkSurfaceOperation>(null);
 
-  const handleSelectOperation = (operationName: string): void => {
-    if (error) {
-      setError('');
-    }
-    if (currentSolution && currentSolution?.selectedPolygons?.length < 2) {
-      setError('please select two polygons');
-    }
-  };
+  const [currentSolution, setCurrentSolution] = useState<ProposedSolution | null>(null);
 
   useEffect(() => {
     const solution = proposedSolutions.find((soln) => soln.id === selectedSolution);
@@ -35,25 +35,44 @@ function WorkSurface(props: Props) {
     }
   }, [currentSolution?.selectedPolygons?.length, error]);
 
+  const handleSelectOperation = (operationName: WorkSurfaceOperation): void => {
+    if (error) {
+      setError('');
+    }
+    if (currentSolution && currentSolution?.selectedPolygons?.length < 2) {
+      setError('please select two polygons');
+    }
+    setOperation(operationName);
+  };
+
+  const onSelectPolygon = (solutionId: number, polygon: Polygon) => {
+    selectPolygon(solutionId, polygon);
+    setOperation(null);
+  };
+
   return (
     <div className="work-surface">
-      <div className="toolbar">
-        {currentSolution && (
+      {currentSolution && (
+        <div className="toolbar">
           <div>
-            <b>Selected polygons:</b>
-            {currentSolution?.selectedPolygons.length > 0 &&
-              currentSolution?.selectedPolygons.map((polygon) => (
-                <span key={uuidV4()}>{getPolygonName(polygon.coordinates[0].length)},</span>
-              ))}
+            {currentSolution?.selectedPolygons.length > 0 && (
+              <>
+                <b>Selected polygons:</b>
+                {currentSolution?.selectedPolygons.map((polygon) => (
+                  <span key={uuidV4()}>{getPolygonName(polygon.coordinates[0].length)},</span>
+                ))}
+              </>
+            )}
           </div>
-        )}
-        <div className="button__container">
-          <button className="button" onClick={() => handleSelectOperation('UNION')}>
-            Union
-          </button>
-          <Button onClick={() => handleSelectOperation('UNION')} text="Intersect" />
+          <div className="button__container">
+            <Button onClick={() => handleSelectOperation('UNION')} text="Union" />
+            <Button onClick={() => handleSelectOperation('INTERSECTION')} text="Intersect" />
+            {currentSolution?.selectedPolygons.length > 0 && (
+              <Button onClick={() => clearSelectedPolygons(currentSolution.id)} text="Clear" danger={true} />
+            )}
+          </div>
         </div>
-      </div>
+      )}
 
       <div className="solution__container">
         {error && <span className="error">{error}</span>}
@@ -77,11 +96,24 @@ function WorkSurface(props: Props) {
                         ))}
                       </div>
 
-                      <Button onClick={() => selectPolygon(currentSolution.id, feature.geometry)} text="select" />
+                      <Button onClick={() => onSelectPolygon(currentSolution.id, feature.geometry)} text="select" />
                     </article>
                   </li>
                 ))}
               </ul>
+              {currentSolution && (
+                <div>
+                  {currentSolution?.selectedPolygons.length > 0 && (
+                    <OperationResults
+                      solutionId={currentSolution.id}
+                      operation={operation}
+                      selectedPolygons={currentSolution.selectedPolygons}
+                      operationResults={operationResults}
+                      onStatUpdate={updateOperationResult}
+                    />
+                  )}
+                </div>
+              )}
             </div>
           </>
         ) : (

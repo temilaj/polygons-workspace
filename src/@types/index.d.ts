@@ -16,15 +16,29 @@ export type ProposedSolution = {
   selectedPolygons: Array<Polygon>;
 };
 
+export type WorkSurfaceOperation = null | 'UNION' | 'INTERSECTION';
+
+export type OperationResult = {
+  solutionId: number;
+  unionArea?: number;
+  intersectionArea?: number;
+  union?: any;
+  currentOperation: WorkSurfaceOperation;
+  intersection?: any;
+};
+
 export type AppState = {
   proposedSolutions: Array<ProposedSolution>;
   selectedSolution: number | null;
+  operationResults: Array<OperationResult>;
 };
 
 export type AppReducerType = {
   setProposedSolutions: (proposedSolutions: Array<ProposedSolution>) => void;
   setSelectedSolution: (solutionId: number) => void;
   selectPolygon: (solutionId: number, polygon: Polygon) => void;
+  updateOperationResult: (solutionId: number, operationResult: OperationResult) => void;
+  clearSelectedPolygons: (solutionId: number) => void;
 };
 
 export type ContextState = AppState & AppReducerType;

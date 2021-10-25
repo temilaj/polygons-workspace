@@ -1,17 +1,30 @@
-import { AppState, Polygon, ProposedSolution } from '../../@types';
+import { AppState, OperationResult, Polygon, ProposedSolution } from '../../@types';
 
-const actions = ['SET_PROPOSED_SOLUTIONS', 'SET_SELECTED_PROPOSED_SOLUTION', 'SELECT_POLYGON'] as const;
+const actions = [
+  'SET_PROPOSED_SOLUTIONS',
+  'SET_SELECTED_PROPOSED_SOLUTION',
+  'SELECT_POLYGON',
+  'UPDATE_RESULT_STATS',
+  'CLEAR_SELECTED_POLYGONS',
+] as const;
 
 type Action = typeof actions[number];
 type AppActions = {
   type: Action;
-  data: number | Array<ProposedSolution> | Polygon | { solutionId: number; polygon: Polygon };
+  data:
+    | number
+    | Array<ProposedSolution>
+    | Polygon
+    | { solutionId: number; polygon: Polygon }
+    | { solutionId: number; operationResult: OperationResult };
 };
 
 export const appActions: Record<Action, Action> = {
   SET_PROPOSED_SOLUTIONS: 'SET_PROPOSED_SOLUTIONS',
   SET_SELECTED_PROPOSED_SOLUTION: 'SET_SELECTED_PROPOSED_SOLUTION',
   SELECT_POLYGON: 'SELECT_POLYGON',
+  UPDATE_RESULT_STATS: 'UPDATE_RESULT_STATS',
+  CLEAR_SELECTED_POLYGONS: 'CLEAR_SELECTED_POLYGONS',
 };
 
 const appReducer = (prevState: AppState, action: AppActions): AppState => {
@@ -70,6 +83,52 @@ const appReducer = (prevState: AppState, action: AppActions): AppState => {
       return {
         ...prevState,
         proposedSolutions: updatedSolutions,
+      };
+    }
+
+    case appActions.CLEAR_SELECTED_POLYGONS: {
+      const { data: solutionId } = action;
+      const { proposedSolutions } = prevState;
+
+      const updatedSolutions = proposedSolutions.map((solution) => {
+        if (solution.id === solutionId) {
+          const updatedSolution: ProposedSolution = {
+            ...solution,
+            selectedPolygons: [],
+          };
+          return updatedSolution;
+        }
+        return solution;
+      });
+
+      return {
+        ...prevState,
+        proposedSolutions: updatedSolutions,
+      };
+    }
+
+    case appActions.UPDATE_RESULT_STATS: {
+      const { solutionId, operationResult } = action.data as { solutionId: number; operationResult: OperationResult };
+      const exisitingResult = prevState.operationResults.find((result) => result.solutionId === solutionId);
+      if (exisitingResult) {
+        const updatedResult = prevState.operationResults.map((result) => {
+          if (result.solutionId === solutionId) {
+            return {
+              ...result,
+              ...operationResult,
+            };
+          }
+          return result;
+        });
+
+        return {
+          ...prevState,
+          operationResults: updatedResult,
+        };
+      }
+      return {
+        ...prevState,
+        operationResults: [...prevState.operationResults, operationResult],
       };
     }
 

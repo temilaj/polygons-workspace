@@ -1,8 +1,9 @@
-import React from "react";
+import React from 'react';
 
 type Props = {
   text: string;
   onClick: () => void;
+  danger?: boolean;
 };
 
 export default function Button(props: Props) {
@@ -11,7 +12,7 @@ export default function Button(props: Props) {
   };
 
   return (
-    <button className="button" onClick={handleClick}>
+    <button className={`button ${props.danger ? 'danger' : ''}`} onClick={handleClick}>
       {props.text}
     </button>
   );

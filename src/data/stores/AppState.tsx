@@ -1,5 +1,5 @@
 import React, { useReducer, useMemo } from 'react';
-import { ProposedSolution, Polygon } from '../../@types';
+import { ProposedSolution, Polygon, OperationResult } from '../../@types';
 
 import AppContext from '../context/AppContext';
 import appReducer, { appActions } from '../reducers/appReducer';
@@ -11,12 +11,13 @@ type Props = {
 
 const AppState = (props: Props) => {
   const [state, dispatch] = useReducer(appReducer, initialAppState);
-  const { proposedSolutions, selectedSolution } = state;
+  const { proposedSolutions, selectedSolution, operationResults } = state;
 
   const appContext = useMemo(
     () => ({
       proposedSolutions,
       selectedSolution,
+      operationResults,
       setProposedSolutions: (proposedSolutions: Array<ProposedSolution>) => {
         dispatch({
           type: appActions.SET_PROPOSED_SOLUTIONS,
@@ -35,8 +36,20 @@ const AppState = (props: Props) => {
           data: { solutionId, polygon },
         });
       },
+      clearSelectedPolygons: (solutionId: number) => {
+        dispatch({
+          type: appActions.CLEAR_SELECTED_POLYGONS,
+          data: solutionId,
+        });
+      },
+      updateOperationResult: (solutionId: number, operationResult: OperationResult) => {
+        dispatch({
+          type: appActions.UPDATE_RESULT_STATS,
+          data: { solutionId, operationResult },
+        });
+      },
     }),
-    [proposedSolutions, selectedSolution],
+    [proposedSolutions, selectedSolution, operationResults],
   );
 
   return <AppContext.Provider value={appContext}>{props.children}</AppContext.Provider>;
