@@ -1,4 +1,4 @@
-import { AppState } from "../../@types";
+import { AppState } from '../../@types';
 
 const initialAppState: AppState = {
   selectedSolution: null,

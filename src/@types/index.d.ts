@@ -1,27 +1,30 @@
-import { Context } from "react";
+export type Polygon = {
+  type: string;
+  coordinates: number[][][];
+};
 
 export type ProposedSolution = {
+  id: number;
   type: string;
   features: [
     {
       type: string;
       properties: {};
-      geometry: {
-        type: string;
-        coordinates: number[][][];
-      };
-    }
+      geometry: Polygon;
+    },
   ];
+  selectedPolygons: Array<Polygon>;
 };
 
 export type AppState = {
-  selectedSolution: ProposedSolution | null;
   proposedSolutions: Array<ProposedSolution>;
+  selectedSolution: number | null;
 };
 
 export type AppReducerType = {
   setProposedSolutions: (proposedSolutions: Array<ProposedSolution>) => void;
-  setSelectedSolution: (proposedSolution: ProposedSolution) => void;
+  setSelectedSolution: (solutionId: number) => void;
+  selectPolygon: (solutionId: number, polygon: Polygon) => void;
 };
 
-export type AppContextType = Context<AppState & AppReducerType>;
+export type ContextState = AppState & AppReducerType;

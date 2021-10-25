@@ -1,21 +1,21 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect } from 'react';
 
-import Navbar from "./Navbar";
-import Panel from "./Panel";
-import SolutionsList from "../Secondary/SolutionsList";
-import SolutionStatistics from "../Secondary/SolutionStatistics";
-import WorkSurface from "./WorkSurface";
-import { proposedSolutions } from "../../data";
-import AppContext from "../../data/context/AppContext";
+import Navbar from './Navbar';
+import Panel from './Panel';
+import SolutionsList from '../Secondary/SolutionsList';
+import SolutionStatistics from '../Secondary/SolutionStatistics';
+import WorkSurface from './WorkSurface';
+import { proposedSolutions } from '../../data';
+import AppContext from '../../data/context/AppContext';
 
-import "./../stylesheets/App.css";
+import './../stylesheets/App.css';
 
 function App() {
   const { setProposedSolutions } = useContext(AppContext);
 
   useEffect(() => {
     setProposedSolutions(proposedSolutions);
-  });
+  }, []);
 
   return (
     <div className="App">
