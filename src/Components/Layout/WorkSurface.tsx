@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
+import AppContext from "../../data/context/AppContext";
 
 type Props = {};
 
 function WorkSurface(props: Props) {
-  return <div className="work-surface">work surface</div>;
+  const { selectedSolution } = useContext(AppContext);
+  return <div className="work-surface"></div>;
 }
 
 export default WorkSurface;

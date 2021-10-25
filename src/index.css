@@ -30,7 +30,23 @@ header {
   padding: 0.5rem 4rem;
 }
 
+.well {
+  background-color: #ececec;
+  padding: 5rem 2rem;
+  text-align: center;
+  border-radius: 3px;
+  border: 1px solid #e5e5e5;
+}
 
+.solution__button {
+  border: none;
+  padding: 0.5rem 1rem;
+  margin-top: 0.4rem;
+  border-radius: 10px;
+  background-color: #2b48ca;
+  color: #fff;
+  font-weight: 600;
+}
   
 @media screen and (min-width: 576px) {
   main {
