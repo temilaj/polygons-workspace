@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { v4 as uuidV4 } from 'uuid';
 
-import { OperationResult, ProposedSolution } from '../../@types';
+import { ProposedSolution } from '../../@types';
 import AppContext from '../../data/context/AppContext';
 
 type Props = {};
@@ -9,18 +8,14 @@ type Props = {};
 function SolutionsList(props: Props) {
   const { selectedSolution, proposedSolutions, operationResults } = useContext(AppContext);
   const [currentSolution, setCurrentSolution] = useState<ProposedSolution | null>(null);
-  const [result, setResult] = useState<OperationResult | null>(null);
 
   useEffect(() => {
     const solution = proposedSolutions.find((soln) => soln.id === selectedSolution);
     if (solution) {
       setCurrentSolution(solution);
     }
-    const result = operationResults.find((result) => result.solutionId === selectedSolution);
-    if (result) {
-      setResult(result);
-    }
   }, [proposedSolutions, operationResults, selectedSolution]);
+  const result = operationResults.find((result) => result.solutionId === selectedSolution);
 
   return (
     <div>

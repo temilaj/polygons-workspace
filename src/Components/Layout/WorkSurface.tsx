@@ -16,6 +16,7 @@ function WorkSurface() {
     operationResults,
     updateOperationResult,
     clearSelectedPolygons,
+    clearOperationResults,
   } = useContext(AppContext);
   const [error, setError] = useState<string>('');
   const [operation, setOperation] = useState<WorkSurfaceOperation>(null);
@@ -48,6 +49,9 @@ function WorkSurface() {
   const onSelectPolygon = (solutionId: number, polygon: Polygon) => {
     selectPolygon(solutionId, polygon);
     setOperation(null);
+    if (currentSolution?.selectedPolygons.length === 2) {
+      clearOperationResults(currentSolution.id);
+    }
   };
 
   return (

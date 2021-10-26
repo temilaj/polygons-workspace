@@ -11,5 +11,6 @@ const AppContext = React.createContext({
   selectPolygon: (solutionId: number, polygon: Polygon) => {},
   updateOperationResult: (solutionId: number, operationResult: OperationResult) => {},
   clearSelectedPolygons: (solutionId: number) => {},
+  clearOperationResults: (solutionId: number) => {},
 } as ContextState);
 export default AppContext;

@@ -6,6 +6,7 @@ const actions = [
   'SELECT_POLYGON',
   'UPDATE_RESULT_STATS',
   'CLEAR_SELECTED_POLYGONS',
+  'CLEAR_RESULT_STAT',
 ] as const;
 
 type Action = typeof actions[number];
@@ -25,6 +26,7 @@ export const appActions: Record<Action, Action> = {
   SELECT_POLYGON: 'SELECT_POLYGON',
   UPDATE_RESULT_STATS: 'UPDATE_RESULT_STATS',
   CLEAR_SELECTED_POLYGONS: 'CLEAR_SELECTED_POLYGONS',
+  CLEAR_RESULT_STAT: 'CLEAR_RESULT_STAT',
 };
 
 const appReducer = (prevState: AppState, action: AppActions): AppState => {
@@ -103,6 +105,7 @@ const appReducer = (prevState: AppState, action: AppActions): AppState => {
 
       return {
         ...prevState,
+        operationResults: [],
         proposedSolutions: updatedSolutions,
       };
     }
@@ -126,9 +129,26 @@ const appReducer = (prevState: AppState, action: AppActions): AppState => {
           operationResults: updatedResult,
         };
       }
+
       return {
         ...prevState,
         operationResults: [...prevState.operationResults, operationResult],
+      };
+    }
+
+    case appActions.CLEAR_RESULT_STAT: {
+      const { data: solutionId } = action;
+      const { operationResults } = prevState;
+      const updatedresults = operationResults.map((result) => {
+        if (result.solutionId === solutionId) {
+          return { solutionId, currentOperation: null };
+        }
+        return result;
+      });
+
+      return {
+        ...prevState,
+        operationResults: updatedresults,
       };
     }
 

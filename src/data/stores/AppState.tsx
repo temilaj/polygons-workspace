@@ -48,6 +48,12 @@ const AppState = (props: Props) => {
           data: { solutionId, operationResult },
         });
       },
+      clearOperationResults: (solutionId: number) => {
+        dispatch({
+          type: appActions.CLEAR_RESULT_STAT,
+          data: solutionId,
+        });
+      },
     }),
     [proposedSolutions, selectedSolution, operationResults],
   );

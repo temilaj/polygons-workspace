@@ -22,9 +22,9 @@ export type OperationResult = {
   solutionId: number;
   unionArea?: number;
   intersectionArea?: number;
-  union?: any;
+  union?: any | null;
   currentOperation: WorkSurfaceOperation;
-  intersection?: any;
+  intersection?: any | null;
 };
 
 export type AppState = {
@@ -38,6 +38,7 @@ export type AppReducerType = {
   setSelectedSolution: (solutionId: number) => void;
   selectPolygon: (solutionId: number, polygon: Polygon) => void;
   updateOperationResult: (solutionId: number, operationResult: OperationResult) => void;
+  clearOperationResults: (solutionId: number) => void;
   clearSelectedPolygons: (solutionId: number) => void;
 };
 
