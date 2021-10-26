@@ -7,6 +7,7 @@ import AppContext from '../../data/context/AppContext';
 import { getPolygonName } from '../../utils';
 import Button from '../Primary/Button';
 import OperationResults from '../Secondary/OperationResults';
+import PolygonMap from '../Secondary/PolygonMap';
 
 function WorkSurface() {
   const {
@@ -20,7 +21,6 @@ function WorkSurface() {
   } = useContext(AppContext);
   const [error, setError] = useState<string>('');
   const [operation, setOperation] = useState<WorkSurfaceOperation>(null);
-
   const [currentSolution, setCurrentSolution] = useState<ProposedSolution | null>(null);
 
   useEffect(() => {
@@ -53,6 +53,9 @@ function WorkSurface() {
       clearOperationResults(currentSolution.id);
     }
   };
+
+  const result = operationResults.find((res) => res.solutionId === selectedSolution);
+  const geoJsonData = result?.currentOperation === 'UNION' ? result?.union : result?.intersection;
 
   return (
     <div className="work-surface">
@@ -88,10 +91,9 @@ function WorkSurface() {
                 {currentSolution.features.map((feature) => (
                   <li key={uuidV4()}>
                     <article className="polygon__card">
-                      <h4>{getPolygonName(feature.geometry.coordinates[0].length)}</h4>
-
-                      <div>
-                        Coordinates
+                      <h4 className="polygon__title">{getPolygonName(feature.geometry.coordinates[0].length)}</h4>
+                      <div className="polygon__body">
+                        <h5>Coordinates</h5>
                         {feature.geometry.coordinates[0].map((coord) => (
                           <div key={uuidV4()} className="coordinates__container">
                             <code>x: {coord[0].toFixed(4)},</code>
@@ -99,24 +101,32 @@ function WorkSurface() {
                           </div>
                         ))}
                       </div>
-
-                      <Button onClick={() => onSelectPolygon(currentSolution.id, feature.geometry)} text="select" />
+                      <div className="polygon__footer">
+                        <Button onClick={() => onSelectPolygon(currentSolution.id, feature.geometry)} text="select" />
+                      </div>
                     </article>
                   </li>
                 ))}
               </ul>
               {currentSolution && (
-                <div>
-                  {currentSolution?.selectedPolygons.length > 0 && (
-                    <OperationResults
-                      solutionId={currentSolution.id}
-                      operation={operation}
-                      selectedPolygons={currentSolution.selectedPolygons}
-                      operationResults={operationResults}
-                      onStatUpdate={updateOperationResult}
-                    />
-                  )}
-                </div>
+                <>
+                  <PolygonMap
+                    coordinates={currentSolution.features[0].geometry.coordinates[0][0]}
+                    currentSolution={currentSolution}
+                    geoJsonData={geoJsonData}
+                  />
+                  <div>
+                    {currentSolution?.selectedPolygons.length > 0 && (
+                      <OperationResults
+                        solutionId={currentSolution.id}
+                        operation={operation}
+                        selectedPolygons={currentSolution.selectedPolygons}
+                        operationResults={operationResults}
+                        onStatUpdate={updateOperationResult}
+                      />
+                    )}
+                  </div>
+                </>
               )}
             </div>
           </>

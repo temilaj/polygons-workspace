@@ -13,7 +13,7 @@ type Props = {
 };
 
 export default function OperationResults(props: Props) {
-  const { selectedPolygons, operation, solutionId, operationResults, onStatUpdate } = props;
+  const { selectedPolygons, operation, solutionId, onStatUpdate } = props;
   useEffect(() => {
     if (selectedPolygons.length === 2 && operation !== null) {
       const polygons = selectedPolygons.map((polygon) => {
