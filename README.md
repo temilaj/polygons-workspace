@@ -9,7 +9,7 @@ The dependencies of this project are managed with yarn (see installation guide [
 ## Setting up
 + Clone this project to any folder on your local machine
 ```bash
-git clone https://github.com/temilaj/polygons-ta <FOLDER_NAME_HERE>
+git clone https://github.com/temilaj/polygons-workspace <FOLDER_NAME_HERE>
 ```
 + Navigate into the folder name specified
 ```bash
@@ -27,19 +27,11 @@ yarn install
 npm install
 ```
 
-## Runnning the bundle
+## Environment Variables
 
-```bash
- yarn build
-```
+Using the `.env.example` file as a guide, add a `.env` . Generate a public access token from [Mapbox](https://account.mapbox.com/access-tokens/)  and assign it to the `REACT_APP_MAPBOX_ACCESS_TOKEN` variable.
 
-or 
-
-```bash
- npm run build
-```
 ## Running the app
-
 Run `yarn start` to intialize and run the webpack development server. Navigate to [http://localhost:3000/](http://localhost:3000).
 
 ```bash
